@@ -13,7 +13,15 @@ MonoBehaviour:
   m_Name: TorretsSO
   m_EditorClassIdentifier: 
   torrentData:
-  - Name: Ola
+  - Name: Torreta_1
     ID: 1
     Size: {x: 1, y: 1}
     Prefab: {fileID: 3933431311286271175, guid: 5005330a3b6052746bf9d9742ac149fe, type: 3}
+  - Name: Torreta_2
+    ID: 2
+    Size: {x: 1, y: 1}
+    Prefab: {fileID: 1932273946931130245, guid: 49cde57971c6dd64a9c913146672ac65, type: 3}
+  - Name: Box
+    ID: 3
+    Size: {x: 1, y: 1}
+    Prefab: {fileID: 36572397164784592, guid: 9353008f609b2f6478c9242636c38ba5, type: 3}

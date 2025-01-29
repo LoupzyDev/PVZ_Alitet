@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class GridData : MonoBehaviour
-{
+public class GridData {
     Dictionary<Vector3Int, PlacementData> placedObjects = new();
+    HashSet<Vector3Int> blockedTiles = new();
 
     public void AddObjectAt(Vector3Int gridPosition,
                             Vector2Int objectSize,
@@ -12,9 +12,11 @@ public class GridData : MonoBehaviour
                             int placedObjectIndex) {
         List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
         PlacementData data = new PlacementData(positionToOccupy, ID, placedObjectIndex);
+
         foreach (var pos in positionToOccupy) {
-            if (placedObjects.ContainsKey(pos))
-                throw new Exception($"Dictionary already contains this cell positiojn {pos}");
+            if (placedObjects.ContainsKey(pos)) {
+                throw new Exception($"Dictionary already contains this cell position {pos}");
+            }
             placedObjects[pos] = data;
         }
     }
@@ -28,28 +30,41 @@ public class GridData : MonoBehaviour
         }
         return returnVal;
     }
-
-    public bool CanPlaceObejctAt(Vector3Int gridPosition, Vector2Int objectSize) {
+    public bool CanPlaceObjectAt(Vector3Int gridPosition, Vector2Int objectSize) {
         List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
         foreach (var pos in positionToOccupy) {
-            if (placedObjects.ContainsKey(pos))
+            if (placedObjects.ContainsKey(pos) || blockedTiles.Contains(pos)) {
                 return false;
+            }
         }
         return true;
     }
 
     internal int GetRepresentationIndex(Vector3Int gridPosition) {
-        if (placedObjects.ContainsKey(gridPosition) == false)
-            return -1;
-        return placedObjects[gridPosition].PlacedObjectIndex;
+        return placedObjects.TryGetValue(gridPosition, out var data) ? data.PlacedObjectIndex : -1;
     }
 
     internal void RemoveObjectAt(Vector3Int gridPosition) {
+        if (!placedObjects.ContainsKey(gridPosition)) return;
+
         foreach (var pos in placedObjects[gridPosition].occupiedPositions) {
             placedObjects.Remove(pos);
         }
     }
+
+    public void BlockTile(Vector3Int gridPosition) {
+        blockedTiles.Add(gridPosition);
+    }
+
+    public void UnblockTile(Vector3Int gridPosition) {
+        blockedTiles.Remove(gridPosition);
+    }
+    public void ClearBlockedTiles() {
+        blockedTiles.Clear();
+    }
+
 }
+
 
 public class PlacementData {
     public List<Vector3Int> occupiedPositions;
