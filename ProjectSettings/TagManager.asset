@@ -7,6 +7,9 @@ TagManager:
   - Enemy
   - Box
   - Turret
+  - TwoBullets
+  - FourBullets
+  - Wall
   layers:
   - Default
   - TransparentFX

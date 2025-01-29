@@ -17,7 +17,6 @@ public class PlacementSystem : MonoBehaviour {
     private List<GameObject> placedGameObjects = new();
     [SerializeField] private List<Vector3Int> tilesToBlock;
     private Vector3Int lastDetectedPosition = Vector3Int.zero;
-
     private void Start() {
         StopPlacement();
         
@@ -39,7 +38,6 @@ public class PlacementSystem : MonoBehaviour {
         inputManager.OnClicked += PlaceTorrets;
         inputManager.OnExit += StopPlacement;
     }
-
     private void PlaceTorrets() {
         if (selectedTorretsIndex == -1) return;
 

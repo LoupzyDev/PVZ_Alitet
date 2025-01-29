@@ -10,14 +10,16 @@ public class Turret : MonoBehaviour {
     [SerializeField] private Transform pivot;
     [SerializeField] private float bulletSpeed = 10f;
     [SerializeField] private int poolSize = 10;
-    [SerializeField] private float fireRate = 2f;
+    [SerializeField] private float fireRate = 1f;
 
     private Queue<GameObject> bulletPool = new Queue<GameObject>();
     private List<GameObject> activeBullets = new List<GameObject>();
+    [SerializeField] private LayerMask ignoreLayer;
 
     private void Start() {
         for (int i = 0; i < poolSize; i++) {
             GameObject bullet = Instantiate(bulletPrefab);
+            bullet.transform.SetParent(transform);
             bullet.SetActive(false);
             bulletPool.Enqueue(bullet);
         }
@@ -39,7 +41,7 @@ public class Turret : MonoBehaviour {
 
         float maxDistance = Mathf.Abs(7f - pivot.position.x);
 
-        if (Physics.Raycast(pivot.position, direction, out hit, maxDistance)) {
+        if (Physics.Raycast(pivot.position, direction, out hit, maxDistance,~ignoreLayer)) {
             float targetX = hit.point.x;
 
 
